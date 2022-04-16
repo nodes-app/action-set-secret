@@ -40,19 +40,23 @@ runs:
         }
 
         get_organization_secret_visibility () {
+          local organization="$1"
+          local name="$2"
           echo $(
             gh api \
               -H "Accept: application/vnd.github.v3+json" \
-              "/orgs/$ORGANIZATION/actions/secrets/$NAME" \
+              "/orgs/$organization/actions/secrets/$name" \
             | jq -r '.visibility'
           )
         }
 
         get_organization_secret_selected_repositories () {
+          local organization="$1"
+          local name="$2"
           echo $(
             gh api \
               -H "Accept: application/vnd.github.v3+json" \
-              "/orgs/$ORGANIZATION/actions/secrets/$NAME/repositories" \
+              "/orgs/$organization/actions/secrets/$name/repositories" \
             | jq -r '.repositories[].name'
             | tr '\n' ' '
           )
@@ -63,9 +67,9 @@ runs:
           local name="$2"
           local value="$3"
 
-          local visibility=$(get_organization_secret_visibility)
+          local visibility=$(get_organization_secret_visibility "$organization" "$name")
           if [ "$visibility" = 'selected' ]; then
-            local selected_repos=$(get_organization_secret_selected_repositories)
+            local selected_repos=$(get_organization_secret_selected_repositories "$organization" "$name")
             gh secret set "$name" -b "$value" --org "$organization" --visibility selected --repos "$selected_repos"
           else
             gh secret set "$name" -b "$value" --org "$organization" --visibility "$visibility"
