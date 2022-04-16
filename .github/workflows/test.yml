@@ -7,7 +7,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Test Action
+      - name: Test Organization Secret Setting
         uses: ./
         with:
-          foo: bar
+          name: EXAMPLE_ORG_SECRET
+          value: foo
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - name: Test Repository Secret Setting
+        uses: ./
+        with:
+          name: EXAMPLE_REPO_SECRET
+          value: bar
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
