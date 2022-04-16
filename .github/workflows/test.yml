@@ -17,6 +17,7 @@ jobs:
       - name: Test Repository Secret Setting
         uses: ./
         with:
+          repository: ${{ github.repository }}
           name: EXAMPLE_REPO_SECRET
           value: bar
           token: ${{ secrets.GH_ACCESS_TOKEN }}
