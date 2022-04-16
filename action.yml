@@ -77,9 +77,11 @@ runs:
         }
 
         organization_secret_exists () {
+          local organization="$1"
+          local name="$2"
           gh api \
             -H "Accept: application/vnd.github.v3+json" \
-            /orgs/nodes-app/actions/secrets/EXAMPLE_SECRET \
+            "/orgs/$organization/actions/secrets/$name" \
             &> /dev/null \
           && echo true \
           || echo false
